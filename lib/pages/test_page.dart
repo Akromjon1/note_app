@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'test_page.dart';
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-  static const String id = "home_page";
+import 'home_page.dart';
+class HomePageTwo extends StatefulWidget {
+  const HomePageTwo({Key? key}) : super(key: key);
+  static const String id = "home_page_two";
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageTwo> createState() => _HomePageTwoState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageTwoState extends State<HomePageTwo> {
 
   void bottomSheet(context){
     showModalBottomSheet(context: context,
@@ -21,11 +21,11 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height / 2.5 +
                 MediaQuery.of(context).viewInsets.bottom,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(25),
-                topLeft: Radius.circular(25),
-              )
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(25),
+                  topLeft: Radius.circular(25),
+                )
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 00.0, 20.0, 0.0),
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         leading: GestureDetector(
             onTap: (){
-              Navigator.of(context).pushNamed(HomePageTwo.id);
+              Navigator.pushNamed(context, HomePage.id);
             },
             child: Icon(Icons.dashboard, size: MediaQuery.of(context).size.height/32)),
         title: Text("My tasks",style: TextStyle(fontSize: MediaQuery.of(context).size.height/26, fontWeight: FontWeight.w700),),
@@ -166,73 +166,72 @@ class _HomePageState extends State<HomePage> {
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height/9),
           child: Expanded(
               child: Row(
-            children:  [
-              const SizedBox(width: 20,),
-              Text("What`s on your mind?",style: TextStyle(fontSize: MediaQuery.of(context).size.height/42, fontStyle: FontStyle.italic, fontWeight: FontWeight.w600, color: Colors.red),),
-              const Expanded(child: SizedBox.shrink()),
-            ],
-          )),
+                children:  [
+                  const SizedBox(width: 20,),
+                  Text("What`s on your mind?",style: TextStyle(fontSize: MediaQuery.of(context).size.height/42, fontStyle: FontStyle.italic, fontWeight: FontWeight.w600, color: Colors.red),),
+                  const Expanded(child: SizedBox.shrink()),
+                ],
+              )),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.only(right: 20, left: 20,),
+      body: GridView.count(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        crossAxisCount: 2,
         primary: false,
         children: [
-          Container(height: MediaQuery.of(context).size.height/8.44,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-            color: Colors.red
-          ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
+                color: Colors.red
+            ),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
+                Text("Pay emma",style: TextStyle(fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.height/35,color: Colors.white ),),
+                Text("20 dollard for manga", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.height/52.75,fontWeight: FontWeight.w300),),
                 Row(
                   children: [
-                    Icon(Icons.task_alt_outlined,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
-                    SizedBox(width: 20,),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Pay emma",style: TextStyle(fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.height/35,color: Colors.white ),),
-                          Text("20 dollard for manga", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.height/52.75,fontWeight: FontWeight.w300),),
-                        ],
+                    Expanded(child: SizedBox.shrink()),
+                    Row(
+                      children: [
+                        Icon(Icons.task_alt_outlined,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
+                        Icon(Icons.delete_rounded,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
 
-                      ),
-                    ),
+                      ],
+                    )
                   ],
-                ),
-                Icon(Icons.delete_rounded,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
-
+                )
               ],
             ),
-          
           ),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-    decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-    color: Colors.red
-    ),),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
+          Container(
+            margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
                 color: Colors.red
-            ),),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
                 color: Colors.red
-            ),),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
+                color: Colors.red
+            ),
+          ),
+
+
+
 
 
 
@@ -242,13 +241,13 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home,), label: "Home",
-        activeIcon: Icon(Icons.home_outlined)),
-        BottomNavigationBarItem(icon: Icon(Icons.nightlight_outlined),label: "Night light"),
+          BottomNavigationBarItem(icon: Icon(Icons.home,), label: "Home",
+              activeIcon: Icon(Icons.home_outlined)),
+          BottomNavigationBarItem(icon: Icon(Icons.nightlight_outlined),label: "Night light"),
 
-      ],
+        ],
 
-        
+
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
         bottomSheet(context);

@@ -56,8 +56,7 @@ class ToDo{
   @override
   int get hashCode => Object.hash(taskName, taskContent, category, isImportant,
       isCompleted, craetedDate, dueDate);
-
-  @override
+  
   int compareTo(ToDo other) {
     int compareTaskName = this.taskName.compareTo(other.taskName);
     if(compareTaskName == 0){
