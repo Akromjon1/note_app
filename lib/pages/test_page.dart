@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'home_page.dart';
 class HomePageTwo extends StatefulWidget {
   const HomePageTwo({Key? key}) : super(key: key);
   static const String id = "home_page_two";
@@ -147,11 +145,7 @@ class _HomePageTwoState extends State<HomePageTwo> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.red,
         centerTitle: false,
-        leading: GestureDetector(
-            onTap: (){
-              Navigator.pushNamed(context, HomePage.id);
-            },
-            child: Icon(Icons.dashboard, size: MediaQuery.of(context).size.height/32)),
+        leading: Icon(Icons.dashboard, size: MediaQuery.of(context).size.height/32),
         title: Text("My tasks",style: TextStyle(fontSize: MediaQuery.of(context).size.height/26, fontWeight: FontWeight.w700),),
         actions: [
           IconButton(
