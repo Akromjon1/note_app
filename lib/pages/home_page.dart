@@ -1,5 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../services/util_services.dart';
+import 'itemOfHome.dart';
 import 'test_page.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,7 +16,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //late User _user;
+  List<FileSystemEntity> listDirectory = [];
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  late Directory mainDirectory;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _readFolder();
+  }
+  void _submit() async {
+    String folderName = _controller.text.trim().toString();
+    if (kDebugMode) {
+      print("${_controller.text}hjjhj");
+    }
+    _controller.clear();
 
+
+    String fullPath = "${mainDirectory.path}/$folderName";
+    Directory directory = Directory(fullPath);
+    bool isExist = await directory.exists();
+    if(isExist) {
+    if (!mounted) return;
+     Utils.fireSnackBar("This folder already exist!", context);
+     Navigator.pop(context);
+     } else {
+    await directory.create();
+    if (!mounted) return;
+    Utils.fireSnackBar("Folder Successfully created!", context);
+    await _readFolder();
+    Navigator.pop(context);
+    }
+  }
+  Future<void> _readFolder() async {
+    if(Platform.isIOS) {
+      mainDirectory = await getApplicationDocumentsDirectory();
+      listDirectory = mainDirectory.listSync();
+
+      FileSystemEntity? trash;
+      for (var element in listDirectory) {
+        if(element.path.contains("/.Trash")) {
+          trash = element;
+        }
+      }
+      listDirectory.remove(trash);
+      setState((){
+
+      });
+    } else {
+      String pathAndroid = "storage/emulated/0/TodoApp";
+      if(await Permission.manageExternalStorage.request().isGranted && await Permission.storage.request().isGranted) {
+        mainDirectory = Directory(pathAndroid);
+        bool isExist = await mainDirectory.exists();
+        if(!isExist) {
+          mainDirectory.create();
+        }
+        listDirectory = mainDirectory.listSync();
+        setState((){});
+      }
+    }
+  }
   void bottomSheet(context){
     showModalBottomSheet(context: context,
         backgroundColor: Colors.transparent,
@@ -61,6 +129,7 @@ class _HomePageState extends State<HomePage> {
                       border: Border.all(color: Colors.grey),
                     ),
                     child: TextField(
+                      controller: _controller,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Todo title...",
@@ -68,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(height: 5,),
-                  Text("Todo title",style: TextStyle(fontWeight: FontWeight.w400, fontSize: MediaQuery.of(context).size.height/56.25),),
+                  Text("Task content",style: TextStyle(fontWeight: FontWeight.w400, fontSize: MediaQuery.of(context).size.height/56.25),),
                   SizedBox(height: 5,),
                   Container(
                     padding: EdgeInsets.only(left: 15),
@@ -79,17 +148,17 @@ class _HomePageState extends State<HomePage> {
                       border: Border.all(color: Colors.grey),
                     ),
                     child: TextField(
+                      controller: _contentController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Todo title...",
+                        hintText: "Subtitle",
                       ),
                     ),
                   ),
                   SizedBox(height: 10,),
                   GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pop();
-                    },
+                    onTap: _submit,
+
                     child: Container(
                       height: MediaQuery.of(context).size.height/14,
                       width: double.infinity,
@@ -108,6 +177,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
+
+
   bool isSearch = false;
   @override
   Widget build(BuildContext context) {
@@ -174,71 +245,43 @@ class _HomePageState extends State<HomePage> {
           )),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.only(right: 20, left: 20,),
-        primary: false,
-        children: [
-          Container(height: MediaQuery.of(context).size.height/8.44,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-            color: Colors.red
-          ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.task_alt_outlined,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
-                    SizedBox(width: 20,),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Pay emma",style: TextStyle(fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.height/35,color: Colors.white ),),
-                          Text("20 dollard for manga", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.height/52.75,fontWeight: FontWeight.w300),),
-                        ],
-
-                      ),
-                    ),
-                  ],
-                ),
-                Icon(Icons.delete_rounded,color: Colors.white,size: MediaQuery.of(context).size.height/38,),
-
-              ],
-            ),
-          
-          ),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-    decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-    color: Colors.red
-    ),),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-                color: Colors.red
-            ),),
-          Container(height: MediaQuery.of(context).size.height/8.44,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
-                color: Colors.red
-            ),),
-
-
-
-
-        ],
+      body:          Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: listDirectory.length,
+          itemBuilder: (context, index) {
+            String currentPath = listDirectory[index].path;
+            String title = currentPath.substring(currentPath.lastIndexOf("/") + 1);
+            return HomeItem(
+              iconColor: Colors.white,
+              icon: Icons.task_alt_outlined,
+              title: title,
+              //subtitle: subtitle,
+              onPressed: () => Navigator.pop(context),
+            );
+          }, separatorBuilder: (BuildContext context, int index) {
+            return Divider(height: 20,);
+        },
+        ),
       ),
+
+
+
+
+      // Container(height: MediaQuery.of(context).size.height/8.44,
+          //   padding: EdgeInsets.symmetric(horizontal: 20),
+          //   margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/70),
+          //   decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height/42.2),
+          //       color: Colors.red
+          //   ),),
+
+
+
+
+   
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         items: [

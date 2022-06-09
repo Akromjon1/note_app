@@ -41,9 +41,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-</dict>
-</plist>
+    	<key>UIViewControllerBasedStatusBarAppearance</key>
+    	<false/>
+    	<key>CADisableMinimumFrameDurationOnPhone</key>
+    	<true/>
+    	<key>LSSupportsOpeningDocumentsInPlace</key>
+        <true/>
+        <key>UIFileSharingEnabled</key>
+        <true/>
+    </dict>
+    </plist>
